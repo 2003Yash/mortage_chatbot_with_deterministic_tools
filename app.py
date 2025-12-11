@@ -6,7 +6,7 @@ from typing import Dict, Any, Optional
 
 
 # STREAMLIT SETUP
-st.set_page_config(page_title="Zayed - Personal UAE Mortgage Assistant", page_icon="🏠")
+st.set_page_config(page_title="AskRivo - AI Real Estate Advisor for UAE Buyers", page_icon="🏠")
 
 # --- TOKEN HANDLING (Adapted for Streamlit) ---
 if "HF_TOKEN" in st.secrets:
@@ -125,15 +125,17 @@ class LLMService:
         """Generates the empathetic 'Smart Friend' response."""
         
         system_prompt = (
-            "You are a friendly, empathetic UAE Mortgage Expert agent named 'Zayed'. "
-            "Your goal is to guide expats through the mortgage maze. "
-            "STYLE: Conversational, warm, not robotic. Use 'I' and 'we'. "
+            "You are AskRivo, an AI real estate advisor built to protect buyers in the UAE. "
+            "Your core mission is UNBIASED GUIDANCE — unlike commission-driven agents, you reveal hidden costs, verify developer reliability, and calculate real financial risks. "
+            "YOU DO NOT HAVE A SALES AGENDA. Your only goal is to empower people to buy homes based on hard facts and transparency, never sales pressure. "
+            "TONE: Conversational, warm, and genuinely protective of the buyer's interests. Use 'I' and 'we'. Act as a trusted advisor, not a salesperson. "
             "CRITICAL: Do NOT calculate math yourself. Use the data provided in the context below. "
-            "If the user can't afford something, deliver the news kindly and constructively. Offer alternatives. "
-            f"RULES: Assume 4.5% interest, Max 25 years tenure. Always mention the hidden 7% upfront costs when discussing prices. "
+            "If the user can't afford something or faces financial risk, deliver the news kindly and constructively. Always suggest alternatives. "
+            f"RULES: Assume 4.5% interest, Max 25 years tenure. Always warn about the hidden 7% upfront costs when discussing prices — this is a key protection. "
+            "ALWAYS highlight red flags: unfavorable contract terms, unreliable developers, hidden fees, or unfavorable financing. "
             "If they're buying, ask about how long they plan to stay to give them real Buy vs Rent insight. "
             "IMPORTANT: NEVER end your response by asking to generate PDFs, reports, or complex tasks. Keep it simple and human. "
-            "Your responses should feel like genuine advice from someone who's helped dozens of people before."
+            "Your responses should feel like genuine, protective advice from someone who puts buyers first — every single time."
         )
         
         if context_data:
@@ -199,15 +201,16 @@ class MortgageAgent:
 if "agent" not in st.session_state:
     st.session_state.agent = MortgageAgent()
     # Add initial greeting
-    greeting = "Salam! I'm Zayed, your mortgage guide. Buying in the UAE can be tricky with hidden fees and regulations. Tell me, are you looking to buy a new home, or just exploring?"
+    greeting = "Salam! I'm AskRivo, your unbiased AI real estate advisor. Unlike commission-driven agents, I reveal hidden costs, verify developer reliability, and calculate real financial risks. My only agenda: empower you with hard facts and transparency — never sales pressure. What property decision are you exploring today?"
     st.session_state.messages = [{"role": "assistant", "content": greeting}]
 
 # Display Heading and Examples
-st.title("🏠 Zayed - Personal UAE Mortgage Assistant")
+st.title("🏠 AskRivo - AI Real Estate Advisor for UAE Buyers")
+st.markdown("**Protecting your property investment with intelligent analysis and market insights.**")
 
 with st.expander("📝 Example Inputs", expanded=False):
     st.markdown("""
-    **Try asking Zayed about:**
+    **Try asking AskRivo about:**
     1. I want to buy a 2M AED apartment, 20% down, 25 years
     2. I'm paying 7k rent. Considering buying a 1.2m apartment with 240k down. I think I'll stay 4 years.
     3. Outstanding balance 1,200,000 AED, current rate 5%, 12 years left. New rate offered 4.2% — worth switching?
@@ -230,7 +233,7 @@ if prompt := st.chat_input("Type your message here..."):
     # Append to Agent's internal history (for LLM context)
     st.session_state.agent.history.append({"role": "user", "content": prompt})
 
-    with st.spinner("Zayed is thinking..."):
+    with st.spinner("AskRivo is analyzing..."):
         agent = st.session_state.agent
         
         # 1. NLU Extraction
